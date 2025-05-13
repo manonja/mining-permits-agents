@@ -81,7 +81,12 @@ async def run_ea_scoping(input_data: ProjectInput):
         try:
             if os.path.exists('output/regulatory_check.md'):
                 with open('output/regulatory_check.md', 'r') as f:
-                    response_data["regulatory_check"] = f.read()
+                    regulatory_content = f.read()
+                    # Ensure proper Markdown formatting
+                    regulatory_content = regulatory_content.replace('\n\n', '\n')
+                    # Make sure bullet points are properly formatted
+                    regulatory_content = regulatory_content.replace('*   ', '* ')
+                    response_data["regulatory_check"] = regulatory_content
         except Exception as e:
             print(f"Error reading regulatory_check.md: {e}")
         
@@ -95,20 +100,34 @@ async def run_ea_scoping(input_data: ProjectInput):
                     current_section = None
                     content_lines = []
                     
-                    for line in pd_content.split('\n'):
-                        if line.startswith('**'):  # Section header
-                            # Save previous section if it exists
-                            if current_section and content_lines:
-                                sections[current_section] = '\n'.join(content_lines)
-                                content_lines = []
-                            # Extract new section name
-                            current_section = line.strip('*').strip()
-                        elif line.strip() and current_section:
-                            content_lines.append(line)
+                    # Use a regex approach to extract sections more reliably
+                    import re
+                    # Find all section headers and their content
+                    section_pattern = r'\*\*(.*?)\*\*(.*?)(?=\*\*.*?\*\*|\Z)'
+                    matches = re.findall(section_pattern, pd_content, re.DOTALL)
                     
-                    # Save final section
-                    if current_section and content_lines:
-                        sections[current_section] = '\n'.join(content_lines)
+                    if matches:
+                        for section_name, content in matches:
+                            # Clean up the section name and content
+                            clean_section = section_name.strip()
+                            clean_content = content.strip()
+                            sections[clean_section] = clean_content
+                    else:
+                        # Fall back to the original approach if regex fails
+                        for line in pd_content.split('\n'):
+                            if line.startswith('**'):  # Section header
+                                # Save previous section if it exists
+                                if current_section and content_lines:
+                                    sections[current_section] = '\n'.join(content_lines)
+                                    content_lines = []
+                                # Extract new section name
+                                current_section = line.strip('*').strip()
+                            elif line.strip() and current_section:
+                                content_lines.append(line)
+                        
+                        # Save final section
+                        if current_section and content_lines:
+                            sections[current_section] = '\n'.join(content_lines)
                     
                     response_data["pd_outline"] = sections
         except Exception as e:
@@ -118,7 +137,13 @@ async def run_ea_scoping(input_data: ProjectInput):
         try:
             if os.path.exists('output/indigenous_nations.md'):
                 with open('output/indigenous_nations.md', 'r') as f:
-                    response_data["indigenous_nations"] = f.read()
+                    indigenous_content = f.read()
+                    # Ensure proper Markdown formatting and line breaks
+                    # Replace any problematic characters and ensure consistent formatting
+                    indigenous_content = indigenous_content.replace('\n\n', '\n')
+                    # Make sure bullet points are properly formatted
+                    indigenous_content = indigenous_content.replace('*   ', '* ')
+                    response_data["indigenous_nations"] = indigenous_content
         except Exception as e:
             print(f"Error reading indigenous_nations.md: {e}")
         
@@ -129,32 +154,56 @@ async def run_ea_scoping(input_data: ProjectInput):
                     next_steps_content = f.read()
                     # Parse the next steps into structured format
                     next_steps = []
-                    current_step = None
-                    explanation_lines = []
                     
-                    for line in next_steps_content.split('\n'):
-                        if line.strip():
-                            if line.startswith('1.') or line.startswith('2.') or line.startswith('3.'):
-                                # If we have a previous step, save it
-                                if current_step and explanation_lines:
-                                    next_steps.append({
-                                        "step": current_step,
-                                        "explanation": ' '.join(explanation_lines)
-                                    })
-                                    explanation_lines = []
-                                
-                                # Extract the step text (after the number and period)
-                                current_step = line.split('.', 1)[1].strip()
-                            elif current_step:
-                                # Add this line to the explanation
-                                explanation_lines.append(line.strip())
+                    # Split the content by numbered items (1., 2., 3.)
+                    import re
+                    # Find all numbered items with their explanations
+                    step_pattern = r'(\d+\.)\s+(.*?)(?=\d+\.\s+|\Z)'
+                    matches = re.findall(step_pattern, next_steps_content, re.DOTALL)
                     
-                    # Add the last step if it exists
-                    if current_step and explanation_lines:
-                        next_steps.append({
-                            "step": current_step,
-                            "explanation": ' '.join(explanation_lines)
-                        })
+                    for _, match in matches:
+                        # The first line is the step title, the rest is the explanation
+                        lines = [line.strip() for line in match.strip().split('\n')]
+                        if lines:
+                            step = lines[0]
+                            explanation = ' '.join(lines[1:]) if len(lines) > 1 else ""
+                            next_steps.append({
+                                "step": step,
+                                "explanation": explanation
+                            })
+                    
+                    # If regex didn't work, fall back to the original approach
+                    if not next_steps:
+                        current_step = None
+                        explanation_lines = []
+                        
+                        for line in next_steps_content.split('\n'):
+                            if line.strip():
+                                if line.startswith('1.') or line.startswith('2.') or line.startswith('3.'):
+                                    # If we have a previous step, save it
+                                    if current_step and explanation_lines:
+                                        next_steps.append({
+                                            "step": current_step,
+                                            "explanation": ' '.join(explanation_lines)
+                                        })
+                                        explanation_lines = []
+                                    
+                                    # Extract the step text (after the number and period)
+                                    parts = line.split('.', 1)
+                                    if len(parts) > 1:
+                                        current_step = parts[1].strip()
+                                    else:
+                                        current_step = line.strip()
+                                elif current_step:
+                                    # Add this line to the explanation
+                                    explanation_lines.append(line.strip())
+                        
+                        # Add the last step if it exists
+                        if current_step and explanation_lines:
+                            next_steps.append({
+                                "step": current_step,
+                                "explanation": ' '.join(explanation_lines)
+                            })
                     
                     response_data["next_steps"] = next_steps
         except Exception as e:
