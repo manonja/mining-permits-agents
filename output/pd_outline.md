@@ -1,11 +1,13 @@
 **Project Overview**
-*   Project Location, Site Description, and Access Routes (including proximity to sensitive areas and existing infrastructure)
-*   Proposed Mining Methods (e.g., open pit, underground) and Ore Processing Techniques (including beneficiation, leaching methods, and reagent use specific to cobalt recovery)
-*   Key Infrastructure Requirements (e.g., power supply, water pipelines, access roads, processing plant, accommodations, waste rock storage, tailings storage facility)
-*   Project Schedule and Phases (e.g., exploration, construction, operations, closure, post-closure monitoring)
+
+*   **Project Location and Access:** Description of the project site within the Skeena region, including proximity to local communities, significant water bodies (e.g., Skeena River tributaries), transportation corridors, and proposed access methods for personnel and materials.
+*   **Mining Methods and Processing Techniques:** Outline of the planned large-scale mining approach (e.g., open pit and/or underground) suitable for sediment-hosted stratiform deposits, detailing ore extraction, hauling, and beneficiation processes to recover cobalt concentrate, noting any specific reagents or complex steps required.
+*   **Infrastructure Requirements:** Summary of essential project infrastructure, including power generation/connection, water supply systems, camp facilities, processing plant complex, workshops, administrative buildings, waste rock storage areas, and the design basis for the large-scale tailings storage facility.
+*   **Project Timeline:** Overview of the anticipated project phases, including the remaining exploration/definition work, detailed engineering, construction schedule, estimated duration of operational mining and processing, and preliminary plans for closure and reclamation activities.
 
 **Potential Environmental Effects**
-*   Impacts on Water Quality (including potential for elevated concentrations of cobalt, nickel, arsenic, and other associated heavy metals, as well as changes in pH and turbidity from mining and processing activities)
-*   Management of Waste Rock and Tailings (including potential for Acid Rock Drainage (ARD) and Metal Leaching (ML) from sulfide-bearing materials often associated with cobalt ores, and planned mitigation measures)
-*   Effects on Fish and Wildlife Habitat (including direct disturbance from infrastructure, noise, dust, and potential impacts on aquatic habitats from watercourse crossings or discharge)
-*   Environmental Monitoring and Management Plans (including proposed programs for water quality, air quality, noise, vibration, and ecological monitoring, and contingency plans for potential incidents)
+
+*   **Impacts on Water Quality:** Assessment of potential effects on surface water and groundwater quality from mining, processing, and waste storage activities, specifically addressing the potential for increased concentrations of cobalt, associated heavy metals (e.g., copper, nickel, lead, zinc), suspended solids, and altered pH due to project operations and drainage.
+*   **Waste Rock and Tailings Management:** Description of the large volumes of waste rock and tailings anticipated from a large-scale operation, highlighting the potential risk of Acid Rock Drainage (ARD) and Metal Leaching (ML) from sulfidic materials often associated with sediment-hosted deposits, and proposed management and storage strategies to mitigate these risks.
+*   **Impacts on Fish and Wildlife Habitats:** Evaluation of potential direct and indirect impacts on aquatic and terrestrial habitats within and surrounding the project area, including disturbances to fish-bearing streams and riparian areas in the Skeena region, wildlife movement corridors, critical habitats, and potential effects from noise, dust, and altered environmental conditions.
+*   **Environmental Monitoring and Mitigation Planning:** Outline of the proposed environmental monitoring programs (e.g., baseline, construction, operations, closure) focusing on key aspects like water quality (especially metal concentrations), ARD/ML potential, air quality, noise, and ecological health, alongside a summary of planned mitigation measures and environmental management systems to minimize identified effects.

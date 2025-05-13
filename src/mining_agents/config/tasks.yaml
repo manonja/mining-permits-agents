@@ -1,13 +1,13 @@
 project_intake_task:
   description: >
-    Present input prompts to capture key parameters for a hypothetical cobalt mining project.
-    Ask for the following information:
-    1. Project name
-    2. General location (region in BC like Skeena or Kootenay)
-    3. Type of cobalt mineralization (e.g., "sediment-hosted" or "magmatic sulfide-associated")
-    4. Estimated operational scale (small, medium, large)
+    Process the project parameters that have been provided for a hypothetical cobalt mining project:
+    - Project name: {project_name}
+    - General location (region in BC): {location_region}
+    - Type of cobalt mineralization: {cobalt_type}
+    - Estimated operational scale: {scale}
     
-    Store the user's responses for use by subsequent agents.
+    Your task is to summarize these parameters and confirm they have been received properly.
+    Do not prompt for additional input - the parameters have already been collected.
   expected_output: >
     A structured summary of the collected project parameters including project name,
     location region, cobalt mineralization type, and estimated scale.
@@ -47,6 +47,12 @@ pd_outline_task:
     Generate a bullet-point list of 3-4 key sub-headings or points of consideration 
     for the "Project Overview" and "Potential Environmental Effects" sections of a 
     Project Description, tailored specifically for cobalt mining.
+    
+    Project details:
+    - Project name: {project_name}
+    - Location region: {location_region}
+    - Cobalt type: {cobalt_type}
+    - Scale: {scale}
     
     For the "Project Overview" section, include points about:
     - Project location and access
