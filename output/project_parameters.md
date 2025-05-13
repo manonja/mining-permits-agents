@@ -1,8 +1,10 @@
-Project Intake Summary: Northern Cobalt Initiative
+The initial project parameters for the environmental assessment process have been received and processed.
 
-The following initial project parameters for the Northern Cobalt Initiative have been received and processed:
+**Project Parameter Summary:**
 
-*   **Project Name:** Northern Cobalt Initiative
-*   **General Location (Region in BC):** Skeena
-*   **Type of Cobalt Mineralization:** Sediment-Hosted Stratiform
-*   **Estimated Operational Scale:** Large
+*   **Project Name:** Northern cobalt
+*   **Location (Region in BC):** Kootenay
+*   **Type of Cobalt Mineralization:** Magmatic Sulfite-associated
+*   **Estimated Operational Scale:** Small
+
+These parameters have been successfully documented for the initial stages of project development.

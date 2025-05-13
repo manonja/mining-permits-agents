@@ -1,6 +1,5 @@
-Based on the simplified lookup table for the 'Skeena' region, potential placeholder Indigenous Nations could include:
+Based on the general project location in the Kootenay region and utilizing a highly simplified placeholder lookup, a potentially affected Indigenous Nation is identified as:
 
-*   Skeena
-*   Kootenay
+*   Placeholder Nation Gamma
 
-Please note: This is a highly simplified example for illustrative purposes only. Identifying potentially affected Indigenous Nations for a real project in British Columbia is a deeply complex and sensitive process. It requires thorough research, often involving geographic data, historical context, traditional use studies, consultation protocols, and direct engagement with various Nations. Multiple Nations' traditional territories may overlap, and precise project boundaries are critical. This simplified exercise does not reflect the rigour, respect, and extensive engagement required in a real-world environmental assessment process to properly identify and engage with all potentially affected Indigenous Nations.
+**Please note:** This is a vastly simplified example for illustrative purposes. Identifying the actual Indigenous Nations whose traditional territories may be affected by a resource project in British Columbia is a deeply complex and sensitive process. It requires thorough research using detailed mapping, historical information, traditional knowledge, and, most critically, direct engagement with Indigenous Nations to understand their asserted or established rights and titles, interests, and traditional land use. Early and respectful engagement with the correct Nations is paramount in the environmental assessment and project development process.
