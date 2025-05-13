@@ -1,0 +1,87 @@
+project_intake_task:
+  description: >
+    Present input prompts to capture key parameters for a hypothetical cobalt mining project.
+    Ask for the following information:
+    1. Project name
+    2. General location (region in BC like Skeena or Kootenay)
+    3. Type of cobalt mineralization (e.g., "sediment-hosted" or "magmatic sulfide-associated")
+    4. Estimated operational scale (small, medium, large)
+    
+    Store the user's responses for use by subsequent agents.
+  expected_output: >
+    A structured summary of the collected project parameters including project name,
+    location region, cobalt mineralization type, and estimated scale.
+  agent: project_intake_agent
+
+regulatory_check_task:
+  description: >
+    Check the provided project parameters against key BC Environmental Assessment triggers
+    and identify high-level regulatory requirements. 
+    
+    Project parameters to check:
+    - Project name: {project_name}
+    - Location region: {location_region}
+    - Cobalt type: {cobalt_type}
+    - Scale: {scale}
+    
+    Based on the project scale, provide a preliminary indication of whether a formal EA 
+    is likely required using the following logic:
+    IF scale == 'Large' THEN 'EA Likely'.
+    ELIF scale == 'Medium' THEN 'EA Potentially Required'.
+    ELSE 'Review RPR thresholds for specific activities.'
+    
+    List 2-3 key provincial acts or regulations that will almost certainly apply 
+    to a cobalt mining project, such as:
+    - BC Environmental Assessment Act
+    - BC Mines Act
+    - Water Sustainability Act
+  expected_output: >
+    A statement indicating EA likelihood based on project scale and a list of
+    2-3 key applicable provincial acts or regulations.
+  agent: regulatory_check_agent
+  context:
+    - project_intake_task
+
+pd_outline_task:
+  description: >
+    Generate a bullet-point list of 3-4 key sub-headings or points of consideration 
+    for the "Project Overview" and "Potential Environmental Effects" sections of a 
+    Project Description, tailored specifically for cobalt mining.
+    
+    For the "Project Overview" section, include points about:
+    - Project location and access
+    - Mining methods and processing techniques
+    - Infrastructure requirements
+    - Project timeline
+    
+    For the "Potential Environmental Effects" section, include points about:
+    - Water quality impacts (specifically mentioning cobalt and associated heavy metals)
+    - Waste rock and tailings management (highlighting ARD/ML potential)
+    - Impacts on local fish and wildlife habitats
+    - Plan for environmental monitoring
+  expected_output: >
+    Two bulleted lists (one for "Project Overview" and one for "Potential Environmental Effects")
+    with 3-4 specific considerations for each section relevant to cobalt mining.
+  agent: pd_outline_agent
+  context:
+    - project_intake_task
+
+indigenous_nation_id_task:
+  description: >
+    Based on the general project location (region in BC), identify 1-2 placeholder 
+    Indigenous Nation names that would potentially be affected by the project.
+    
+    Project location: {location_region}
+    
+    Use the following simplified lookup table:
+    IF location_region == 'Skeena' THEN output: 'Skeena', 'Kootenay'.
+    IF location_region == 'Kootenay' THEN output: 'Placeholder Nation Gamma'.
+    
+    Emphasize that this is a highly simplified example of a deeply complex and 
+    sensitive aspect of the EA process.
+  expected_output: >
+    A list of 1-2 placeholder Indigenous Nation names based on the project location,
+    with a clear disclaimer about the simplification of this complex process.
+  agent: indigenous_nation_id_agent
+  context:
+    - project_intake_task
