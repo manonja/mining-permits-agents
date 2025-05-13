@@ -44,6 +44,13 @@ class MiningAgents():
             config=self.agents_config['indigenous_nation_id_agent'], # type: ignore[index]
             verbose=True
         )
+        
+    @agent
+    def next_steps_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['next_steps_agent'], # type: ignore[index]
+            verbose=True
+        )
 
     @task
     def project_intake_task(self) -> Task:
@@ -74,6 +81,19 @@ class MiningAgents():
             config=self.tasks_config['indigenous_nation_id_task'], # type: ignore[index]
             context=[self.project_intake_task()],
             output_file='output/indigenous_nations.md'
+        )
+        
+    @task
+    def next_steps_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['next_steps_task'], # type: ignore[index]
+            context=[
+                self.project_intake_task(),
+                self.regulatory_check_task(),
+                self.pd_outline_task(),
+                self.indigenous_nation_id_task()
+            ],
+            output_file='output/next_steps.md'
         )
 
     @crew

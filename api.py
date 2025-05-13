@@ -5,7 +5,7 @@ import json
 import os
 import sys
 import uvicorn
-from typing import Optional
+from typing import Optional, List, Dict
 
 # Import your mining agents
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -32,11 +32,16 @@ class ProjectInput(BaseModel):
     cobalt_type: str
     scale: str
 
+class NextStep(BaseModel):
+    step: str
+    explanation: str
+
 class EAResponse(BaseModel):
     project_parameters: dict
     regulatory_check: Optional[str] = None 
     pd_outline: Optional[dict] = None
     indigenous_nations: Optional[str] = None
+    next_steps: Optional[List[NextStep]] = None
 
 # Add a root route for testing
 @app.get("/")
@@ -116,6 +121,44 @@ async def run_ea_scoping(input_data: ProjectInput):
                     response_data["indigenous_nations"] = f.read()
         except Exception as e:
             print(f"Error reading indigenous_nations.md: {e}")
+        
+        # Read next steps if file exists
+        try:
+            if os.path.exists('output/next_steps.md'):
+                with open('output/next_steps.md', 'r') as f:
+                    next_steps_content = f.read()
+                    # Parse the next steps into structured format
+                    next_steps = []
+                    current_step = None
+                    explanation_lines = []
+                    
+                    for line in next_steps_content.split('\n'):
+                        if line.strip():
+                            if line.startswith('1.') or line.startswith('2.') or line.startswith('3.'):
+                                # If we have a previous step, save it
+                                if current_step and explanation_lines:
+                                    next_steps.append({
+                                        "step": current_step,
+                                        "explanation": ' '.join(explanation_lines)
+                                    })
+                                    explanation_lines = []
+                                
+                                # Extract the step text (after the number and period)
+                                current_step = line.split('.', 1)[1].strip()
+                            elif current_step:
+                                # Add this line to the explanation
+                                explanation_lines.append(line.strip())
+                    
+                    # Add the last step if it exists
+                    if current_step and explanation_lines:
+                        next_steps.append({
+                            "step": current_step,
+                            "explanation": ' '.join(explanation_lines)
+                        })
+                    
+                    response_data["next_steps"] = next_steps
+        except Exception as e:
+            print(f"Error reading next_steps.md: {e}")
         
         return response_data
         

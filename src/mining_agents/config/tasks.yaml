@@ -91,3 +91,32 @@ indigenous_nation_id_task:
   agent: indigenous_nation_id_agent
   context:
     - project_intake_task
+
+next_steps_task:
+  description: >
+    Review all findings from the previous agents and propose three clear, actionable next steps 
+    for the mining project. These next steps should be prioritized based on critical path items 
+    and regulatory requirements.
+
+    Consider the following information:
+    1. Project parameters: {project_name}, {location_region}, {cobalt_type}, {scale}
+    2. Regulatory assessment: Likelihood of formal EA requirement and key applicable acts
+    3. Project Description outline: Key sections that will need to be developed
+    4. Indigenous Nations: Identified Nations that may be affected by the project
+
+    For each next step:
+    - Provide a clear, specific action
+    - Explain why it's a priority at this stage
+    - Mention any relevant timeframes or deadlines if applicable
+
+    Focus on practical actions that move the project forward in the assessment process.
+  expected_output: >
+    A numbered list of three prioritized, actionable next steps with brief explanations
+    for why each step is important at this stage of the project.
+  agent: next_steps_agent
+  context:
+    - project_intake_task
+    - regulatory_check_task
+    - pd_outline_task
+    - indigenous_nation_id_task
+  output_file: output/next_steps.md

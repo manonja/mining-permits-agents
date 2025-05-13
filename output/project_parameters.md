@@ -1,10 +1,8 @@
-The initial project parameters for the environmental assessment process have been received and processed.
+Project Intake Summary:
 
-**Project Parameter Summary:**
+The following initial project parameters have been received and processed for the proposed mining project:
 
-*   **Project Name:** Northern cobalt
-*   **Location (Region in BC):** Kootenay
+*   **Project Name:** Northern Cobalt Initiative
+*   **General Location (Region in BC):** Kootenay
 *   **Type of Cobalt Mineralization:** Magmatic Sulfite-associated
-*   **Estimated Operational Scale:** Small
-
-These parameters have been successfully documented for the initial stages of project development.
+*   **Estimated Operational Scale:** Medium
