@@ -95,43 +95,39 @@ async def run_ea_scoping(input_data: ProjectInput):
             if os.path.exists('output/pd_outline.md'):
                 with open('output/pd_outline.md', 'r') as f:
                     pd_content = f.read()
-                    # Parse into sections
+                    
+                    # Initialize a dictionary for the two main sections
                     sections = {}
-                    current_section = None
-                    content_lines = []
                     
-                    # Use a regex approach to extract sections more reliably
                     import re
-                    # Find all section headers and their content
-                    section_pattern = r'\*\*(.*?)\*\*(.*?)(?=\*\*.*?\*\*|\Z)'
-                    matches = re.findall(section_pattern, pd_content, re.DOTALL)
                     
-                    if matches:
-                        for section_name, content in matches:
-                            # Clean up the section name and content
-                            clean_section = section_name.strip()
-                            clean_content = content.strip()
-                            sections[clean_section] = clean_content
-                    else:
-                        # Fall back to the original approach if regex fails
-                        for line in pd_content.split('\n'):
-                            if line.startswith('**'):  # Section header
-                                # Save previous section if it exists
-                                if current_section and content_lines:
-                                    sections[current_section] = '\n'.join(content_lines)
-                                    content_lines = []
-                                # Extract new section name
-                                current_section = line.strip('*').strip()
-                            elif line.strip() and current_section:
-                                content_lines.append(line)
+                    # Find main section blocks (includes header and all content until next main section)
+                    main_section_pattern = r'\*\*(Project Overview|Potential Environmental Effects)\*\*(.*?)(?=\*\*(Project Overview|Potential Environmental Effects)\*\*|\Z)'
+                    main_sections = re.findall(main_section_pattern, pd_content, re.DOTALL)
+                    
+                    for section_match in main_sections:
+                        section_name = section_match[0].strip()
+                        section_content = section_match[1].strip()
                         
-                        # Save final section
-                        if current_section and content_lines:
-                            sections[current_section] = '\n'.join(content_lines)
+                        # Transform subsection headers format to what we want
+                        # Change: * **Subsection:** content
+                        # To: * Subsection: content
+                        section_content = re.sub(r'\*\s+\*\*(.*?):\*\*', r'* \1:', section_content)
+                        
+                        # Extract all bullet points with their content, preserving original formatting
+                        bullet_points = re.findall(r'(\*\s+.*?)(?=\*\s+|$)', section_content, re.DOTALL)
+                        
+                        # Combine all bullet points into a single string
+                        if bullet_points:
+                            # Join all bullet points with newlines
+                            combined_content = "\n".join([bp.strip() for bp in bullet_points])
+                            sections[section_name] = combined_content
                     
                     response_data["pd_outline"] = sections
         except Exception as e:
             print(f"Error reading pd_outline.md: {e}")
+            import traceback
+            print(traceback.format_exc())
             
         # Read indigenous nations info if file exists
         try:
