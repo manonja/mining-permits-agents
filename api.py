@@ -5,7 +5,8 @@ import json
 import os
 import sys
 import uvicorn
-from typing import Optional, List, Dict
+from typing import Optional, List
+import tempfile
 
 # Import your mining agents
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -57,43 +58,45 @@ async def health_check():
 async def run_ea_scoping(input_data: ProjectInput):
     """Run the EA scoping process with the mining agents"""
     try:
-        # Prepare inputs for CrewAI
-        inputs = {
-            'project_name': input_data.project_name,
-            'location_region': input_data.location_region,
-            'cobalt_type': input_data.cobalt_type,
-            'scale': input_data.scale
-        }
-        
-        # Save inputs to file for reference
-        with open('output/user_inputs.json', 'w') as f:
-            json.dump(inputs, f, indent=2)
-        
-        # Run the Crew
-        result = MiningAgents().crew().kickoff(inputs=inputs)
-        
-        # Read output files for response
-        response_data = {
-            "project_parameters": inputs
-        }
-        
-        # Read regulatory check results if file exists
-        try:
-            if os.path.exists('output/regulatory_check.md'):
-                with open('output/regulatory_check.md', 'r') as f:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Prepare inputs for CrewAI
+            inputs = {
+                'project_name': input_data.project_name,
+                'location_region': input_data.location_region,
+                'cobalt_type': input_data.cobalt_type,
+                'scale': input_data.scale
+            }
+
+            regulatory_md_path = os.path.join(temp_dir, 'regulatory_check.md')
+            pd_md_path = os.path.join(temp_dir, 'pd_outline.md')
+            indigenous_md_path = os.path.join(temp_dir, 'indigenous_nations.md')
+            next_steps_md_path = os.path.join(temp_dir, 'next_steps.md')
+            
+            # Save inputs to file for reference
+            with open(os.path.join(temp_dir, 'user_inputs.json'), 'w') as f:
+                json.dump(inputs, f, indent=2)
+            
+            # Run the Crew
+            result = MiningAgents().crew().kickoff(inputs=inputs)
+            
+            # Read output files for response
+            response_data = {
+                "project_parameters": inputs
+            }
+            
+            # Read regulatory check results if file exists
+            if os.path.exists(regulatory_md_path):
+                with open(regulatory_md_path, 'r') as f:
                     regulatory_content = f.read()
                     # Ensure proper Markdown formatting
                     regulatory_content = regulatory_content.replace('\n\n', '\n')
                     # Make sure bullet points are properly formatted
                     regulatory_content = regulatory_content.replace('*   ', '* ')
                     response_data["regulatory_check"] = regulatory_content
-        except Exception as e:
-            print(f"Error reading regulatory_check.md: {e}")
-        
-        # Read project description outline if file exists
-        try:
-            if os.path.exists('output/pd_outline.md'):
-                with open('output/pd_outline.md', 'r') as f:
+            
+            # Read project description outline if file exists
+            if os.path.exists(pd_md_path):
+                with open(pd_md_path, 'r') as f:
                     pd_content = f.read()
                     # Parse into sections
                     sections = {}
@@ -130,13 +133,10 @@ async def run_ea_scoping(input_data: ProjectInput):
                             sections[current_section] = '\n'.join(content_lines)
                     
                     response_data["pd_outline"] = sections
-        except Exception as e:
-            print(f"Error reading pd_outline.md: {e}")
-            
-        # Read indigenous nations info if file exists
-        try:
-            if os.path.exists('output/indigenous_nations.md'):
-                with open('output/indigenous_nations.md', 'r') as f:
+                
+            # Read indigenous nations info if file exists
+            if os.path.exists(indigenous_md_path):
+                with open(indigenous_md_path, 'r') as f:
                     indigenous_content = f.read()
                     # Ensure proper Markdown formatting and line breaks
                     # Replace any problematic characters and ensure consistent formatting
@@ -144,13 +144,10 @@ async def run_ea_scoping(input_data: ProjectInput):
                     # Make sure bullet points are properly formatted
                     indigenous_content = indigenous_content.replace('*   ', '* ')
                     response_data["indigenous_nations"] = indigenous_content
-        except Exception as e:
-            print(f"Error reading indigenous_nations.md: {e}")
         
-        # Read next steps if file exists
-        try:
-            if os.path.exists('output/next_steps.md'):
-                with open('output/next_steps.md', 'r') as f:
+            # Read next steps if file exists
+            if os.path.exists(next_steps_md_path):
+                with open(next_steps_md_path, 'r') as f:
                     next_steps_content = f.read()
                     # Parse the next steps into structured format
                     next_steps = []
@@ -198,16 +195,14 @@ async def run_ea_scoping(input_data: ProjectInput):
                                     # Add this line to the explanation
                                     explanation_lines.append(line.strip())
                         
-                        # Add the last step if it exists
-                        if current_step and explanation_lines:
-                            next_steps.append({
-                                "step": current_step,
-                                "explanation": ' '.join(explanation_lines)
-                            })
-                    
-                    response_data["next_steps"] = next_steps
-        except Exception as e:
-            print(f"Error reading next_steps.md: {e}")
+                    # Add the last step if it exists
+                    if current_step and explanation_lines:
+                        next_steps.append({
+                            "step": current_step,
+                            "explanation": ' '.join(explanation_lines)
+                        })
+                
+                response_data["next_steps"] = next_steps
         
         return response_data
         
