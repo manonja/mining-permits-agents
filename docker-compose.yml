@@ -1,0 +1,21 @@
+services:
+  app:
+    image: mining_agents:latest
+    container_name: mining_agents
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+#       start_period: 10s
+
+networks:
+  app-network:
+    driver: bridge
