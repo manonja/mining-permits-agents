@@ -52,4 +52,4 @@ USER appuser:appuser
 EXPOSE 8080
 
 # Run uvicorn
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "mining_agents.api:app", "--host", "0.0.0.0", "--port", "8080"]
