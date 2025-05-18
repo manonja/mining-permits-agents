@@ -20,6 +20,13 @@ logger = logging.getLogger(__name__)
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
+def prepend_slash(path: str) -> str:
+    # Crew chops off the leading slash, so we need to add two slashes to ensure the file is created relative to the root
+    # https://github.com/crewAIInc/crewAI/blob/bef59715987ba52c94710b0c0c77745fb4ce5185/src/crewai/task.py#L308
+    # NOTE: UGLY WORKAROUND, REMOVE ASAP
+    if path.startswith('/'):
+        return '/' + path
+    return path
 
 @CrewBase
 class MiningAgents():
@@ -81,7 +88,8 @@ class MiningAgents():
     @task
     def project_intake_task(self) -> Task:
         logger.info("Creating project_intake_task")
-        output_file = os.path.join(self.output_base_dir, 'project_parameters.md')
+        output_file = str(os.path.join(self.output_base_dir, 'project_parameters.md'))
+        output_file = prepend_slash(output_file)
         logger.info(f"project_intake_task output file: {output_file}")
         task_instance = Task(
             config=self.tasks_config['project_intake_task'], # type: ignore[index]
@@ -93,7 +101,8 @@ class MiningAgents():
     @task
     def regulatory_check_task(self) -> Task:
         logger.info("Creating regulatory_check_task")
-        output_file = os.path.join(self.output_base_dir, 'regulatory_check.md')
+        output_file = str(os.path.join(self.output_base_dir, 'regulatory_check.md'))
+        output_file = prepend_slash(output_file)
         logger.info(f"regulatory_check_task output file: {output_file}")
         task_instance = Task(
             config=self.tasks_config['regulatory_check_task'], # type: ignore[index]
@@ -106,7 +115,8 @@ class MiningAgents():
     @task
     def pd_outline_task(self) -> Task:
         logger.info("Creating pd_outline_task")
-        output_file = os.path.join(self.output_base_dir, 'pd_outline.md')
+        output_file = str(os.path.join(self.output_base_dir, 'pd_outline.md'))
+        output_file = prepend_slash(output_file)
         logger.info(f"pd_outline_task output file: {output_file}")
         task_instance = Task(
             config=self.tasks_config['pd_outline_task'], # type: ignore[index]
@@ -119,7 +129,8 @@ class MiningAgents():
     @task
     def indigenous_nation_id_task(self) -> Task:
         logger.info("Creating indigenous_nation_id_task")
-        output_file = os.path.join(self.output_base_dir, 'indigenous_nations.md')
+        output_file = str(os.path.join(self.output_base_dir, 'indigenous_nations.md'))
+        output_file = prepend_slash(output_file)
         logger.info(f"indigenous_nation_id_task output file: {output_file}")
         task_instance = Task(
             config=self.tasks_config['indigenous_nation_id_task'], # type: ignore[index]
@@ -132,7 +143,8 @@ class MiningAgents():
     @task
     def next_steps_task(self) -> Task:
         logger.info("Creating next_steps_task")
-        output_file = os.path.join(self.output_base_dir, 'next_steps.md')
+        output_file = str(os.path.join(self.output_base_dir, 'next_steps.md'))
+        output_file = prepend_slash(output_file)
         logger.info(f"next_steps_task output file: {output_file}")
         task_instance = Task(
             config=self.tasks_config['next_steps_task'], # type: ignore[index]
