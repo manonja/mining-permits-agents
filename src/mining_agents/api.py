@@ -74,7 +74,6 @@ async def run_ea_scoping(input_data: ProjectInput):
     logger.info(f"Starting EA scoping for project: {input_data.project_name}")
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
-            temp_dir = 'output'
             # Prepare inputs for CrewAI
             inputs = {
                 'project_name': input_data.project_name,
