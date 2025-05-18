@@ -41,6 +41,8 @@ WORKDIR /app
 
 # Copy the virtual environment from the builder stage
 COPY --from=builder /opt/venv /opt/venv
+# Copy the entire app directory to include the installed package
+COPY --from=builder /app /app
 
 # Fix permissions
 RUN chown -R appuser:appuser /app
